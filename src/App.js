@@ -60,7 +60,6 @@ const onDragEnd = (result, columns, setColumns) => {
 			[remove] = sourceItems.splice(source.index, 1);
 		}
 		destItems.splice(destination.index, 0, remove);
-		console.log(sourceColumn);
 
 		setColumns({
 			...columns,
@@ -95,8 +94,6 @@ const handleDelete = (column, item, columns, setColumns) => {
 	const filteredColumn = findColumn[0][1].items.filter(
 		(item) => item.id != itemId
 	);
-
-	console.log(findColumn[0][1]);
 
 	setColumns({
 		...columns,
@@ -167,28 +164,31 @@ function App() {
 																		}}
 																	>
 																		{item.content}
-																		<button
-																			onClick={(e) =>
-																				handleDelete(
-																					column,
-																					item,
-																					columns,
-																					setColumns
-																				)
-																			}
-																			style={{
-																				position: 'absolute',
-																				userSelect: 'non',
-																				padding: 10,
-																				right: 10,
-																				minHeight: '3px',
-																				color: 'black',
-																				border: 'none',
-																				borderRadius: 30,
-																			}}
-																		>
-																			❌
-																		</button>
+
+																		{column.name === 'Rewards' ? null : (
+																			<button
+																				onClick={(e) =>
+																					handleDelete(
+																						column,
+																						item,
+																						columns,
+																						setColumns
+																					)
+																				}
+																				style={{
+																					position: 'absolute',
+																					userSelect: 'non',
+																					padding: 10,
+																					right: 10,
+																					minHeight: '3px',
+																					color: 'black',
+																					border: 'none',
+																					borderRadius: 30,
+																				}}
+																			>
+																				❌
+																			</button>
+																		)}
 																	</div>
 																);
 															}}
