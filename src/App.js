@@ -45,10 +45,9 @@ const onDragEnd = (result, columns, setColumns) => {
 		const destItems = [...destColumn.items];
 		let remove = [];
 
+		if (destColumn.name === 'Rewards') return;
+
 		if (sourceColumn.name == 'Rewards') {
-			console.log(source.index);
-			console.log(sourceItems);
-			console.log(sourceItems.slice(source.index, source.index + 1));
 			let companyName = sourceItems.slice(source.index, source.index + 1)[0]
 				.content;
 			[remove] = [
@@ -57,11 +56,12 @@ const onDragEnd = (result, columns, setColumns) => {
 					content: companyName,
 				},
 			];
-			console.log([remove]);
 		} else {
 			[remove] = sourceItems.splice(source.index, 1);
 		}
 		destItems.splice(destination.index, 0, remove);
+		console.log(sourceColumn);
+
 		setColumns({
 			...columns,
 			[source.droppableId]: {
@@ -83,6 +83,28 @@ const onDragEnd = (result, columns, setColumns) => {
 			[source.droppableId]: { ...column, items: copiedItems },
 		});
 	}
+};
+
+const handleDelete = (column, item, columns, setColumns) => {
+	const columnName = column.name;
+	const itemId = item.id;
+	const findColumn = Object.entries(columns).filter(
+		(col) => col[1].name === columnName
+	);
+
+	const filteredColumn = findColumn[0][1].items.filter(
+		(item) => item.id != itemId
+	);
+
+	console.log(findColumn[0][1]);
+
+	setColumns({
+		...columns,
+		[findColumn[0][0]]: {
+			...findColumn[0][1],
+			items: filteredColumn,
+		},
+	});
 };
 
 function App() {
@@ -132,6 +154,7 @@ function App() {
 																		{...provided.draggableProps}
 																		{...provided.dragHandleProps}
 																		style={{
+																			position: 'relative',
 																			userSelect: 'non',
 																			padding: 16,
 																			margin: '0 0 8px 0',
@@ -144,6 +167,28 @@ function App() {
 																		}}
 																	>
 																		{item.content}
+																		<button
+																			onClick={(e) =>
+																				handleDelete(
+																					column,
+																					item,
+																					columns,
+																					setColumns
+																				)
+																			}
+																			style={{
+																				position: 'absolute',
+																				userSelect: 'non',
+																				padding: 10,
+																				right: 10,
+																				minHeight: '3px',
+																				color: 'black',
+																				border: 'none',
+																				borderRadius: 30,
+																			}}
+																		>
+																			❌
+																		</button>
 																	</div>
 																);
 															}}
