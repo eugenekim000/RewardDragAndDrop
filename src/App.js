@@ -6,6 +6,9 @@ import { v4 as uuid } from 'uuid';
 const items = [
 	{ id: uuid(), content: 'first reward' },
 	{ id: uuid(), content: 'second reward' },
+	{ id: uuid(), content: 'third reward' },
+	{ id: uuid(), content: 'fourth reward' },
+	{ id: uuid(), content: 'fifth reward' },
 ];
 
 const allColumns = {
@@ -14,7 +17,19 @@ const allColumns = {
 		items: items,
 	},
 	[uuid()]: {
-		name: 'Companies',
+		name: 'Company 1',
+		items: [],
+	},
+	[uuid()]: {
+		name: 'Company 2',
+		items: [],
+	},
+	[uuid()]: {
+		name: 'Company 3',
+		items: [],
+	},
+	[uuid()]: {
+		name: 'Company 4',
 		items: [],
 	},
 };
@@ -28,7 +43,24 @@ const onDragEnd = (result, columns, setColumns) => {
 		const destColumn = columns[destination.droppableId];
 		const sourceItems = [...sourceColumn.items];
 		const destItems = [...destColumn.items];
-		const [remove] = sourceItems.splice(source.index, 1);
+		let remove = [];
+
+		if (sourceColumn.name == 'Rewards') {
+			console.log(source.index);
+			console.log(sourceItems);
+			console.log(sourceItems.slice(source.index, source.index + 1));
+			let companyName = sourceItems.slice(source.index, source.index + 1)[0]
+				.content;
+			[remove] = [
+				{
+					id: uuid(),
+					content: companyName,
+				},
+			];
+			console.log([remove]);
+		} else {
+			[remove] = sourceItems.splice(source.index, 1);
+		}
 		destItems.splice(destination.index, 0, remove);
 		setColumns({
 			...columns,
@@ -82,7 +114,7 @@ function App() {
 														? 'lightblue'
 														: 'lightgrey',
 													padding: 3,
-													width: 250,
+													width: 200,
 													minHeight: 500,
 												}}
 											>
